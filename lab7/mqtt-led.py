@@ -1,0 +1,66 @@
+'''
+CS326 Lab 7
+Author: D. Schuurman
+This program turns on an LED in response to an MQTT message.
+'''
+import RPi.GPIO as GPIO
+import paho.mqtt.client as mqtt
+
+# Constants
+TOPIC = 'jcalvin/button'
+PORT = 1883
+QOS = 0
+KEEPALIVE = 60
+LED = 16
+
+# Set hostname for MQTT broker
+BROKER = ''
+
+# Indicates whether broker requires authentication.
+# Set to True for authenticaion, set to False for anonymous brokers
+BROKER_AUTHENTICATION = True
+
+# Note: these constants must be set if broker requires authentication
+USERNAME = ''   # broker authentication username (if required)
+PASSWORD = ''   # broker authentication password (if required)
+
+# Setup GPIO mode
+GPIO.setmode(GPIO.BCM)
+
+# Configure GPIO for LED output
+GPIO.setup(LED, GPIO.OUT) 
+
+# Callback when a connection has been established with the MQTT broker
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print(f'Connected to {BROKER} successful.')
+    else:
+        print(f'Connection to {BROKER} failed. Return code={rc}')
+
+# Callback when client receives a message from the broker
+# Use button message to turn LED on/off
+def on_message(client, data, msg):
+    print(f'MQTT message received -> topic:{msg.topic}, message:{msg.payload}')
+    if msg.topic == TOPIC:
+       if GPIO.input(LED) == 1:
+          GPIO.output(LED, 0)
+       else:
+          GPIO.output(LED, 1)
+
+# Setup MQTT client and callbacks 
+client = mqtt.Client()
+if BROKER_AUTHENTICATION:
+    client.username_pw_set(USERNAME, password=PASSWORD)
+client.on_connect = on_connect
+client.on_message = on_message
+
+# Connect to MQTT broker and subscribe to the button topic
+client.connect(BROKER, PORT, KEEPALIVE)
+client.subscribe(TOPIC, qos=QOS)
+
+try:
+    client.loop_forever()
+except KeyboardInterrupt:
+    client.disconnect()
+    GPIO.cleanup()
+    print('Done')

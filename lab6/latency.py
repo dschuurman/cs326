@@ -1,7 +1,7 @@
 '''
 CS326 Lab 6
 Author: D. Schuurman
-Experimentally record latency from event to callback function
+Experimentally record latency from GPIO event to callback function
 '''
 import RPi.GPIO as GPIO
 import time
@@ -56,10 +56,10 @@ for count in range(COUNT):
 # Report measurements
 print("Histogram of latencies measured:")
 for x in range(len(histogram)):
-    print(x+1,',',histogram[x])
+    print(f'{x+1},{histogram[x]}')
 
-print('Average latency: ', (sum_of_latencies/COUNT)/NANOSECS_PER_MICROSEC, ' microseconds')
-print('Maximum latency: ', max_latency/NANOSECS_PER_MICROSEC, ' micro-seconds')
+print(f'Average latency: {(sum_of_latencies/COUNT)/NANOSECS_PER_MICROSEC} microseconds')
+print(f'Maximum latency: {max_latency/NANOSECS_PER_MICROSEC} micro-seconds')
 
 GPIO.cleanup()       # clean up GPIO
 
