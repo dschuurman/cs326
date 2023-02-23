@@ -38,5 +38,5 @@ try:
         time.sleep(DELAY)
 
 except KeyboardInterrupt:
-    print("Done")
+    print('Done')
     client.disconnect()
