@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 </head>
 <body>
-<h2>CS326 Lab: Raspberry Pi Web of Things</h2>
+<h2>CS326 Lab: Raspberry Pi Web-of-Things</h2>
 
 <script>
 // Create MQTT client using websockets
@@ -22,7 +22,7 @@ client.connect(options);
 function onConnect() {
    // Once connection has been made, subscribe to motion topic
    console.log("Connected!");
-   client.subscribe("jcalvin/motion");
+   client.subscribe("jcalvin/tag");
 }
 
 function onFail(context) {
@@ -42,15 +42,10 @@ function onMessageArrived(message) {
    console.log("Message: " + message.payloadString);
    console.log("Topic:   " + message.destinationName);
    console.log("QoS:     " + message.qos);
-   if (message.destinationName == 'jcalvin/motion') {
-      if (message.payloadString == '1') {
-         document.getElementById("motion").innerHTML="<b>ON</b>";
-      }
-      else {
-         document.getElementById("motion").innerHTML="Off";
+   if (message.destinationName == 'jcalvin/tag') {
+      document.getElementById("tag").innerHTML=message.payloadString;
       }
    }
-}
 
 // publish an LED message
 function setLED(state) {
@@ -62,11 +57,12 @@ function setLED(state) {
 }
 </script>
 
+LED Controller: 
 <input type="button" value="LED On" onclick="setLED('1');"> 
 <input type="button" value="LED Off" onclick="setLED('0');"> 
 <hr>
-Raspberry Pi motion sensor reading:
-<span id="motion"></span>.
+Raspberry Pi AprilTag detector: 
+<span id="tag"></span>.
 
 </body>
 </html>

@@ -1,20 +1,20 @@
 '''
 CS326 Lab 10
 Author: D. Schuurman
-MQTT motion detector using pi camera.
+Web-of-Things AprilTag detector and LED controller using MQTT
 '''
 import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
 import time
 import sys
 import cv2
+from picamera2 import Picamera2
+from pupil_apriltags import Detector
 
 # Constants
-MOTION_THRESHOLD = 1000000
 PORT = 8883
 QOS = 0
 LED = 16
-DELAY = 2.0
 CERTS = '/etc/ssl/certs/ca-certificates.crt'
 
 # Set hostname for MQTT broker
@@ -23,16 +23,6 @@ BROKER = ''
 # Note: these constants must be set for broker authentication
 USERNAME = ''   # broker authentication username
 PASSWORD = ''   # broker authentication password
-
-def get_frame(cap):
-    ''' Return grayscale image from camera
-    '''
-    ret = False
-    ret, frame = cap.read()
-    if not ret:
-        print('Frame capture failed...')
-        sys.exit(1)    
-    return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 def on_publish(client, userdata, mid):
     ''' Callback when an MQTT message is published
@@ -49,7 +39,8 @@ def on_connect(client, userdata, flags, rc):
         sys.exit(1)
 
 def on_message(client, data, msg):
-    ''' Callback when client receives a PUBLISH message from the broker
+    ''' Callback when client receives a subscribed message from the broker
+        If LED message received, set LED on or off
     '''
     if msg.topic == 'jcalvin/LED':
         print(f'Received message: LED = {msg.payload}')
@@ -59,14 +50,11 @@ def on_message(client, data, msg):
             GPIO.output(LED, False)
 
 # Initialize camera
-print('Initializing camera...')
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-    print('Cannot open camera...')
-    sys.exit(1)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-cap.set(cv2.CAP_PROP_FPS, 2)
+print("Initializing camera...")
+picam2 = Picamera2()
+config = picam2.create_still_configuration( )
+picam2.configure(config)
+picam2.start()
 
 # Initialize GPIO LED output
 GPIO.setmode(GPIO.BCM)
@@ -80,41 +68,44 @@ client.on_connect = on_connect
 client.on_message = on_message
 client.on_publish = on_publish
 
-# Connect to MQTT broker and subscribe to the button topic
+# Connect to MQTT broker and subscribe to the LED topic
 client.connect(BROKER, PORT, 60)
 client.subscribe("jcalvin/LED", qos=QOS)
 client.loop_start()
 
-# initialize background image and initialize motion state
-last_frame = get_frame(cap)
-motion_state = 0
+# initialize AprilTag detector and state variable
+detector = Detector()
+tags_state = ''
 
 try:
     while True:
-        # grab a frame; compute abs difference from the last frame
-        current_frame = get_frame(cap)
-        frameDelta = cv2.absdiff(current_frame, last_frame)
-        diff = frameDelta.sum()
+        # grab a new frame and convert to grayscale
+        frame = picam2.capture_array()
+        img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # If diff > threshold and state changes publish motion event
-        if diff > MOTION_THRESHOLD:
-            if motion_state == 0:
-                print('motion detected!')
-                client.publish('jcalvin/motion', '1')
-                motion_state = 1
-                time.sleep(DELAY)
-                current_frame = get_frame(cap)  # after delay, refresh current frame
+        # Detect any AprilTags
+        results = detector.detect(img)
+
+        # If state of tags has changed, publish an update
+        if results == []:
+            if tags_state != 'None':
+                print('No tags found...')
+                client.publish('jcalvin/tag', 'No tags found')
+                tags_state = 'None'
         else:
-            if motion_state == 1:
-                print('motion stopped...')
-                client.publish('jcalvin/motion', '0')
-                motion_state = 0
-
-        # Update last_frame
-        last_frame = current_frame
+            # Grab all tags detected
+            tags = ''
+            for r in results:
+                # Print tag detection details
+                print(f"AprilTag detected! ID: {r.tag_id}, Family: {r.tag_family}," f"Decision Margin: {r.decision_margin:.2f}")                
+                tags += f'Tag:{r.tag_family}:{r.tag_id} '
+            # If tags state has changes, publish a new message
+            if tags != tags_state:
+                client.publish('jcalvin/tag', tags)
+                tags_state = tags
 
 except KeyboardInterrupt:
     GPIO.cleanup()
     client.disconnect()
-    cap.release()
+    picam2.stop()
     print('Done')
