@@ -1,7 +1,7 @@
 '''
 CS326 Lab 9
 Author: D. Schuurman
-This program stores an I2C TC74 temperature sensor reading every 10 seconds to a cloud database.
+This program stores an I2C TC74 temperature sensor reading every 10 seconds to a PostgreSQL cloud database.
 '''
 import smbus
 import time
@@ -14,7 +14,7 @@ import psycopg2
 BUS = 1            # I2C bus number
 ADDRESS = 0x48     # TC74 I2C bus address
 TIMEZONE = "America/Detroit"
-URL = 'postgres://x:y@host.db.elephantsql.com/z'  # cloud database URL
+URI = 'postgres://username:password@hostname/database'  # cloud database URI
 TABLE = 'temperaturedata'
 PERIOD = 10
 
@@ -36,8 +36,8 @@ bus = smbus.SMBus(BUS)
 
 # Connect to the SQL cloud database
 up.uses_netloc.append("postgres")
-url = up.urlparse(URL)
-conn = psycopg2.connect(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port )
+uri = up.urlparse(URI)
+conn = psycopg2.connect(database=uri.path[1:], user=uri.username, password=uri.password, host=uri.hostname, port=uri.port )
 
 # Open a cursor to perform database operations
 cursor = conn.cursor()
@@ -53,9 +53,10 @@ signal.setitimer(signal.ITIMER_REAL, 1, PERIOD)
 # Continuously loop blocking on signals
 try:
     while True:
-        signal.pause()      # block on signal
+        signal.pause()  # block on signal
+
 except KeyboardInterrupt:
     bus.close()
-    signal.alarm(0)  # Cancel signal alarm
+    signal.alarm(0)     # Cancel signal alarm
     conn.close()
     print('Done')

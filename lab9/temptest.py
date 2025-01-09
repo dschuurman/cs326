@@ -19,6 +19,7 @@ try:
         temp = bus.read_byte(ADDRESS)
         print(f'{temp} degrees C')
         time.sleep(DELAY)
+
 except KeyboardInterrupt:
     bus.close()
     print('Done')
