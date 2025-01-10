@@ -1,9 +1,0 @@
-[Unit]
-Description=Speak IP address at boot time
-After=NetworkManager-wait-online.service sound.target
-[Service]
-User=username
-ExecStartPre=sleep 15
-ExecStart=/bin/sh -c "hostname -I | awk '{print \"address \"$1}' | festival --tts"
-[Install]
-WantedBy=multi-user.target
