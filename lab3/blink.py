@@ -1,25 +1,21 @@
-'''
-CS326 Lab 3
-Author: D. Schuurman
-Blinking LED
-'''
+# CS326 Lab 3
+# Blinking LED
 
+from gpiozero import LED
 import time
-import RPi.GPIO as GPIO
 
-GPIO16 = 16
+# Create LED object using GPIO pin 16
+led = LED(16)
 DELAY = 0.5
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(GPIO16, GPIO.OUT)
-
+# Blink the LED 20 times
 for count in range(20):
-    GPIO.output(GPIO16, True)
+    led.on()
     print('LED: on')
     time.sleep(DELAY)
+    led.off()
     print('LED: off')
-    GPIO.output(GPIO16, False)
     time.sleep(DELAY)
 
+led.close()
 print("Done!")
-GPIO.cleanup()

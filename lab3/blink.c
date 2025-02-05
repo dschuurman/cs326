@@ -1,8 +1,5 @@
 /* CS326 Lab 3
-   Author: D. Schuurman
-   Blinking LED
-*/
-
+   Blinking LED */
 #include <stdio.h>
 #include <pigpio.h>
 #include <unistd.h>

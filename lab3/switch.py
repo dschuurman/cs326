@@ -1,23 +1,27 @@
-'''
-CS326 Lab 3
-Author: D. Schuurman
-Count the number of input switch transitions
-'''
-import RPi.GPIO as GPIO
+# CS326 Lab 3
+# Count number of input switch transitions
 
-GPIO12 = 12
+from gpiozero import Button
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(GPIO12, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-count=0
-state = 1     # Keeps track of the last state of the input
+# Create a Button object with pull_up=True
+button = Button(12, pull_up=True)
+
+# With a pull-up, button is considered active when input is False
+print(f"Button state when pressed: {button.active_state}")
+
+count = 0
+previous_state = False  # Keeps track of the last state of the button input
+
 try:
-   while True:
-      if GPIO.input(GPIO12)==False and state==1:
-         count += 1
-         print(count)
-         state = 0
-      if GPIO.input(GPIO12)==True and state==0:
-         state = 1
+    while True:
+        # is_active will be True when button is pressed
+        if button.is_active and previous_state == False:
+            count += 1
+            print(count)
+            previous_state = True
+        # Check if button is released
+        if not button.is_active and previous_state == True:
+            previous_state = False
+            
 except KeyboardInterrupt:
-   GPIO.cleanup()
+    pass
