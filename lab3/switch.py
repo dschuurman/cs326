@@ -6,9 +6,6 @@ from gpiozero import Button
 # Create a Button object with pull_up=True
 button = Button(12, pull_up=True)
 
-# With a pull-up, button is considered active when input is False
-print(f"Button state when pressed: {button.active_state}")
-
 count = 0
 previous_state = False  # Keeps track of the last state of the button input
 
