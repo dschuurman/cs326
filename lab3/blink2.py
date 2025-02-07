@@ -1,6 +1,5 @@
 # CS326 Lab 3
-# Blinking LED
-
+# Blinking LED using toggle method
 from gpiozero import LED
 import time
 
@@ -10,11 +9,8 @@ DELAY = 0.5
 
 # Blink the LED 20 times
 for count in range(20):
-    led.on()
-    print('LED: on')
-    time.sleep(DELAY)
-    led.off()
-    print('LED: off')
+    led.toggle()
+    print(f'LED: {led.is_lit}')
     time.sleep(DELAY)
 
 led.close()
