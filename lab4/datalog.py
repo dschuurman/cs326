@@ -14,7 +14,7 @@ SAMPLE_TIME = 0.010
 A2D_CH0 = 0
 FILENAME = 'datalog.csv'
 
-# create the spi bus, chip select, and mcp object
+# create the SPI bus, chip select, and mcp object
 spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
 cs = digitalio.DigitalInOut(board.D5)
 mcp = MCP.MCP3008(spi, cs)
@@ -37,11 +37,10 @@ def handler(signum, frame):
 signal.signal(signal.SIGALRM, handler)
 signal.setitimer(signal.ITIMER_REAL, 1, SAMPLE_TIME)
             
-print('Press Ctrl-C to quit...')
+print('Press ctrl-c to quit...')
 try:
-    while True:
-        signal.pause()
+    signal.pause()
 except KeyboardInterrupt:
     signal.setitimer(signal.ITIMER_REAL, 0, 0)  # Cancel interval timer
     f.close()
-    print('Done')
+print('Done')
