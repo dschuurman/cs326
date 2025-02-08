@@ -51,9 +51,8 @@ signal.setitimer(signal.ITIMER_REAL, 1, SAMPLE_TIME)
             
 print('Press Ctrl-C to quit...')
 try:
-    while True:
-        signal.pause()
+    signal.pause()
 except KeyboardInterrupt:
     signal.setitimer(signal.ITIMER_REAL, 0, 0)  # Cancel interval timer
     f.close()
-    print('Done')
+print('Done')

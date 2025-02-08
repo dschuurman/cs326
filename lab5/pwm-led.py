@@ -1,27 +1,24 @@
-'''
-CS326 Lab 5
-Author: D. Schuurman
-PWM LED brightness
-'''
-import RPi.GPIO as GPIO
-import time
+# CS326 Lab 5
+# PWM LED brightness
 
-# Constants
-LED = 16         # LED connected to BCM 16
-PWM_FREQ = 500   # frequency=500HZ
+from gpiozero import PWMLED
 
-GPIO.setmode(GPIO.BCM)         # Use BCM numbers
-GPIO.setup(LED, GPIO.OUT)      # Set LED to output mode.
-pwm = GPIO.PWM(LED, PWM_FREQ)  # Initialize PWM frequency
+# Set LED to BCM 16 with 500Hz frequency
+LED = PWMLED(16, frequency=500)
 
-duty_cycle = 0
-pwm.start(duty_cycle)     # start PWM with 0% duty cycle
-while duty_cycle >= 0 and duty_cycle <=100:
-   duty_cycle = int(input('Enter a PWM duty cycle (enter -1 to end): '))
-   if duty_cycle == -1:
-      break
-   pwm.ChangeDutyCycle(duty_cycle)
-   print("Duty cycle=",duty_cycle,'%')
- 
-pwm.stop()
-GPIO.cleanup()              # reset GPIO ports
+while True:
+   try:
+      duty_cycle = int(input('Enter a PWM duty cycle from 0-100 (enter -1 to end): '))
+      if duty_cycle == -1:
+         break
+      if duty_cycle < 0 or duty_cycle > 100:
+         print("Error: Duty cycle must be between 0 and 100\n")
+         continue
+
+      # Convert percentage to 0-1 range for gpiozero
+      LED.value = duty_cycle / 100
+      print(f'Duty cycle = {duty_cycle}%')
+   except ValueError:
+      print('Error: enter a number from 1 to 100.\n')
+
+print('Done.')

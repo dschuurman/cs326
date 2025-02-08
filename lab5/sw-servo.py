@@ -3,37 +3,30 @@ CS326 Lab 5
 Author: D. Schuurman
 Software PWM control of micro-servo motor position
 '''
-import RPi.GPIO as GPIO   # Import the GPIO library.
-import time               # Import time library
+from gpiozero import Servo
+import time
 
-# Constants
-SERVO = 18                # Connect servomotor to BCM 18
-PWM_FREQ = 50             # Set PWM frequency to 50Hz
 DELAY = 2
 
-GPIO.setmode(GPIO.BCM)      # Use BCM numbers
-GPIO.setup(SERVO, GPIO.OUT) # Set SERVO pin to output mode.
-pwm = GPIO.PWM(SERVO,PWM_FREQ)    
+# Use the gpiozero Servo class
+SERVO = Servo(18)  # Connect servomotor to BCM 18
 
-# loop through different angles
 try:
-   while True:
-      print('setting angle = -72 degrees')
-      pwm.start(5.5)
-      time.sleep(DELAY)
-
-      print('setting angle = 0 degrees')
-      pwm.start(7.5)
-      time.sleep(DELAY)
-
-      print('setting angle = 72 degrees')
-      pwm.start(9.5)
-      time.sleep(DELAY)
- 
+    while True:
+        print('setting minimum angle...')
+        SERVO.value = -1  # Equivalent to 5.5% duty cycle
+        time.sleep(DELAY)
+        
+        print('centering...')
+        SERVO.value = 0  # Equivalent to 7.5% duty cycle
+        time.sleep(DELAY)
+        
+        print('setting maximum angle...')
+        SERVO.value = 1  # Equivalent to 9.5% duty cycle
+        time.sleep(DELAY)
+        
 except KeyboardInterrupt:
-   # return to 0 degrees position and cleanup
-   print('setting angle = 0 degrees')
-   pwm.start(7.5)
-   time.sleep(1) # Wait for servo to respond
-   pwm.stop()
-   GPIO.cleanup()
+    # return to 0 degrees position before exiting
+    print('Reset angle...')
+    SERVO.value = 0
+    time.sleep(1)  # Wait for servo to respond
