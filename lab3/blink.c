@@ -1,5 +1,6 @@
 /* CS326 Lab 3
    Blinking LED */
+
 #include <stdio.h>
 #include <pigpio.h>
 #include <unistd.h>

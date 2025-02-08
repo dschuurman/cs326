@@ -1,8 +1,6 @@
-'''
-CS326 Lab 9
-Author: D. Schuurman
-This program stores an I2C TC74 temperature sensor reading every 10 seconds to a PostgreSQL cloud database.
-'''
+# CS326 Lab 9
+# This program stores an I2C TC74 temperature sensor reading every 10 seconds to a PostgreSQL cloud database.
+
 import smbus
 import time
 import sys

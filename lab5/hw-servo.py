@@ -1,8 +1,6 @@
-'''
-CS326 Lab 5
-Author: D. Schuurman
-Hardware PWM control of micro-servo motor position
-'''
+# CS326 Lab 5
+# Hardware PWM control of micro-servo motor position
+
 import time 
 import pigpio
 

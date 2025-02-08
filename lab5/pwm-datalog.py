@@ -1,10 +1,8 @@
-'''
-CS326 Lab 5
-Author: D. Schuurman
-Sample a PWM signal with an A/D converter
-'''
-import RPi.GPIO as GPIO
+# CS326 Lab 5
+# Sample a PWM signal with an A/D converter
+
 import signal
+from gpiozero import PWMOutputDevice
 from datetime import datetime
 import busio
 import digitalio
@@ -16,15 +14,9 @@ from adafruit_mcp3xxx.analog_in import AnalogIn
 SAMPLE_TIME = 0.010
 A2D_CH0 = 0
 FILENAME = 'datalog.csv'
-PWM = 16             # PWM on BCM 16
-PWM_FREQ = 1         # frequency=1HZ
-PWM_DUTY_CYCLE = 50  # set duty cycle
 
-# Start PWM at 1Hz and 50% duty cycle
-GPIO.setmode(GPIO.BCM)         # Use BCM numbers
-GPIO.setup(PWM, GPIO.OUT)      # Set pin to output mode.
-pwm = GPIO.PWM(PWM, PWM_FREQ)  # Initialize PWM frequency
-pwm.start(PWM_DUTY_CYCLE)      # Initialize duty cycle
+# Start a PWM signal on BCM 16 at 1Hz and 50% duty cycle
+pwm = PWMOutputDevice(pin=16,initial_value=0.5,frequency=1.0)
 
 # create A/D spi bus, chip select, and mcp object
 spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)

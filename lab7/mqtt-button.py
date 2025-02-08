@@ -1,18 +1,14 @@
-'''
-CS326 Lab 7
-Author: D. Schuurman
-This program sends an MQTT message whenever a button is pressed.
-'''
+# CS326 Lab 7
+# This program sends an MQTT message whenever a button is pressed.
+
 import os
-import RPi.GPIO as GPIO
+from gpiozero import Button
 import paho.mqtt.client as mqtt
 
 # Constants
 PORT = 1883
 QOS = 0
 KEEPALIVE = 60
-BUTTON = 12
-BOUNCETIME = 500
 TOPIC = 'jcalvin/button'
 MESSAGE = 'Button pressed'
 
@@ -43,11 +39,8 @@ def button_callback(channel):
     else:
         print(f'PUBLISH returned error: {result}')
 
-# Setup GPIO mode
-GPIO.setmode(GPIO.BCM)  
-
-# Use GPIO 12 as button inputs
-GPIO.setup(BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP) 
+# define button input
+button = Button(12, pull_up=True, bounce_time=0.1)
 
 # Setup MQTT client and callbacks
 client = mqtt.Client()
@@ -57,11 +50,10 @@ client.on_connect=on_connect
 client.connect(BROKER, PORT, KEEPALIVE)
 
 # Detect a falling edge on input pin
-GPIO.add_event_detect(BUTTON, GPIO.FALLING, callback=button_callback, bouncetime=BOUNCETIME)  
+button.when_pressed = button_callback
 
 try:
     client.loop_forever()
 except KeyboardInterrupt:
     client.disconnect()
-    GPIO.cleanup()
-    print('Done')
+print('Done')

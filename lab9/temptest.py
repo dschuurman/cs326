@@ -1,8 +1,6 @@
-'''
-CS326 Lab 9
-Author: D. Schuurman
-This program periodically reads an I2C TC74 temperature sensor and prints the reading.
-'''
+# CS326 Lab 9
+# This program periodically reads an I2C TC74 temperature sensor and prints the reading.
+
 import smbus
 import time
 

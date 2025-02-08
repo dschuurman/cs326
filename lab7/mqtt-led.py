@@ -1,9 +1,7 @@
-'''
-CS326 Lab 7
-Author: D. Schuurman
-This program turns on an LED in response to an MQTT message.
-'''
-import RPi.GPIO as GPIO
+# CS326 Lab 7
+# This program turns on an LED in response to an MQTT message.
+
+from gpiozero import LED
 import paho.mqtt.client as mqtt
 
 # Constants
@@ -11,7 +9,9 @@ TOPIC = 'jcalvin/button'
 PORT = 1883
 QOS = 0
 KEEPALIVE = 60
-LED = 16
+
+# setup LED on BCM 16
+led = LED(16)
 
 # Set hostname for MQTT broker
 BROKER = ''
@@ -23,12 +23,6 @@ BROKER_AUTHENTICATION = True
 # Note: these constants must be set if broker requires authentication
 USERNAME = ''   # broker authentication username (if required)
 PASSWORD = ''   # broker authentication password (if required)
-
-# Setup GPIO mode
-GPIO.setmode(GPIO.BCM)
-
-# Configure GPIO for LED output
-GPIO.setup(LED, GPIO.OUT) 
 
 # Callback when a connection has been established with the MQTT broker
 def on_connect(client, userdata, flags, rc):
@@ -42,10 +36,10 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, data, msg):
     print(f'MQTT message received -> topic:{msg.topic}, message:{msg.payload}')
     if msg.topic == TOPIC:
-       if GPIO.input(LED) == 1:
-          GPIO.output(LED, 0)
+       if led.is_lit
+          led.off()
        else:
-          GPIO.output(LED, 1)
+          led.on()
 
 # Setup MQTT client and callbacks 
 client = mqtt.Client()
@@ -62,5 +56,4 @@ try:
     client.loop_forever()
 except KeyboardInterrupt:
     client.disconnect()
-    GPIO.cleanup()
     print('Done')

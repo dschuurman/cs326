@@ -1,8 +1,6 @@
-'''
-CS326 Lab 8
-Author: D. Schuurman
-This program stores an I2C TC74 temperature sensor reading every 10 seconds to an SQLite database.
-'''
+# CS326 Lab 8
+# This program stores an I2C TC74 temperature sensor reading every 10 seconds to an SQLite database.
+
 import smbus
 import sqlite3
 import time

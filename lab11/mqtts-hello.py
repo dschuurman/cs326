@@ -1,8 +1,6 @@
-'''
-CS326 Lab 11
-Author: D. Schuurman
-Send periodic secure MQTT traffic.
-'''
+# CS326 Lab 11
+# Send periodic secure MQTT traffic.
+
 import paho.mqtt.client as mqtt
 import time
 import os

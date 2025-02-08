@@ -1,8 +1,5 @@
-'''
-CS326 Lab 2
-Author: D. Schuurman
-Compute integral of sin(x)
-'''
+# CS326 Lab 2
+# Compute integral of sin(x)
 
 from math import sin
 

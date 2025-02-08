@@ -1,10 +1,8 @@
-'''
-CS326 Lab 10
-Author: D. Schuurman
-Web-of-Things AprilTag detector and LED controller using MQTT
-'''
+# CS326 Lab 10
+# Web-of-Things AprilTag detector and LED controller using MQTT
+
 import paho.mqtt.client as mqtt
-import RPi.GPIO as GPIO
+from gpiozero import LED
 import time
 import sys
 import cv2
@@ -14,7 +12,6 @@ from pupil_apriltags import Detector
 # Constants
 PORT = 8883
 QOS = 0
-LED = 16
 CERTS = '/etc/ssl/certs/ca-certificates.crt'
 
 # Set hostname for MQTT broker
@@ -23,6 +20,9 @@ BROKER = ''
 # Note: these constants must be set for broker authentication
 USERNAME = ''   # broker authentication username
 PASSWORD = ''   # broker authentication password
+
+# define LED on BCM 16
+led = LED(16)
 
 def on_publish(client, userdata, mid):
     ''' Callback when an MQTT message is published
@@ -42,12 +42,13 @@ def on_message(client, data, msg):
     ''' Callback when client receives a subscribed message from the broker
         If LED message received, set LED on or off
     '''
+    global led
     if msg.topic == 'jcalvin/LED':
         print(f'Received message: LED = {msg.payload}')
         if int(msg.payload) == 1:
-            GPIO.output(LED, True)
+            led.on()
         elif int(msg.payload) == 0:
-            GPIO.output(LED, False)
+            led.off()
 
 # Initialize camera
 print("Initializing camera...")
@@ -55,10 +56,6 @@ picam2 = Picamera2()
 config = picam2.create_still_configuration( )
 picam2.configure(config)
 picam2.start()
-
-# Initialize GPIO LED output
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(LED, GPIO.OUT)
 
 # Setup MQTT client and callbacks
 client = mqtt.Client()

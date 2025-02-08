@@ -1,8 +1,6 @@
-'''
-CS326 Lab 10
-Author: D. Schuurman
-Simple AprilTag detector using pi camera.
-'''
+# CS326 Lab 10
+# Simple AprilTag detector using pi camera.
+
 import time
 import sys
 import cv2
