@@ -1,8 +1,6 @@
-'''
-CS326 Lab 4
-Author: D. Schuurman
-Program to continuously read A/D converter
-'''
+# CS326 Lab 4
+# Program to continuously read A/D converter
+
 from time import sleep
 import busio
 import digitalio

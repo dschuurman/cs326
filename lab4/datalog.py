@@ -1,8 +1,6 @@
-'''
-CS326 Lab 4
-Author: D. Schuurman
-Program to continuously read A/D converter and log data
-'''
+# CS326 Lab 4
+# Program to continuously read A/D converter and log data
+
 import signal
 from datetime import datetime
 import busio
