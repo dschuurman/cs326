@@ -8,7 +8,8 @@ import pigpio
 PWM = 18      # Use hardware PWM on BCM 18
 DELAY = 2
 
-pi = pigpio.pi()       # connect to the pigpio service
+# connect to the pigpio service (which must be running)
+pi = pigpio.pi()
 if not pi.connected:
    exit(0)
 pi.set_PWM_frequency(PWM,50);  # Set PWM frequency to 50Hz

@@ -1,8 +1,6 @@
-'''
-CS326 Lab 5
-Author: D. Schuurman
-Software PWM control of micro-servo motor position
-'''
+# CS326 Lab 5
+# Software PWM control of micro-servo motor position
+
 from gpiozero import Servo
 import time
 
