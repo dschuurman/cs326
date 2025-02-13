@@ -4,11 +4,13 @@ from gpiozero import DigitalInputDevice, DigitalOutputDevice
 import time
 
 # Constants
-PIN = DigitalInputDevice(16)  # Input pin
-POUT = DigitalOutputDevice(18)  # Output pin
 COUNT = 5000  # Number of samples
 HISTOGRAM_SIZE = 500
 NANOSECS_PER_MICROSEC = 1000
+
+# GPIO pin objects
+pin = DigitalInputDevice(16)  # Input pin
+pout = DigitalOutputDevice(18)  # Output pin
 
 # Global variables for timing measurements
 t1 = 0
@@ -32,14 +34,14 @@ def input_callback():
     sum_of_latencies += latency
 
 # Set up the input pin callback
-PIN.when_activated = input_callback
+pin.when_activated = input_callback
 
 # Loop numerous times toggling output to trigger input event
 for count in range(COUNT):
     t1 = time.time_ns()
-    POUT.on()  # equivalent to HIGH
+    pout.on()  # equivalent to HIGH
     time.sleep(0.01)
-    POUT.off()  # equivalent to LOW
+    pout.off()  # equivalent to LOW
 
 # Report measurements
 print("Histogram of latencies measured:")
