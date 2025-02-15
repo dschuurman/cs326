@@ -30,4 +30,4 @@ try:
  
 except KeyboardInterrupt:
    pi.set_servo_pulsewidth(PWM, 0)    # turn pulses off
-   pi.stop()
+pi.stop()

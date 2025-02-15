@@ -27,4 +27,3 @@ except KeyboardInterrupt:
     # return to 0 degrees position before exiting
     print('Reset angle...')
     SERVO.value = 0
-    time.sleep(1)  # Wait for servo to respond
