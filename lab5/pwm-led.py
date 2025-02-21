@@ -3,8 +3,8 @@
 
 from gpiozero import PWMLED
 
-# Set LED to BCM 16 with 500Hz frequency
-LED = PWMLED(16, frequency=500)
+# Set LED to BCM 16 with 50Hz frequency
+LED = PWMLED(16, frequency=50)
 
 while True:
    try:
