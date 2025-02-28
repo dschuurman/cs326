@@ -5,7 +5,7 @@ import time
 
 # Constants
 COUNT = 5000  # Number of samples
-HISTOGRAM_SIZE = 500
+HISTOGRAM_SIZE = 1000
 NANOSECS_PER_MICROSEC = 1000
 
 # GPIO pin objects
