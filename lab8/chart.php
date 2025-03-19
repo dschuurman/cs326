@@ -38,8 +38,8 @@ var data = [{
 }];
 
 var layout = {
-    xaxis: { title: 'Date and time' },
-    yaxis: { title: 'Temperature (degrees C)' }
+    xaxis: { title: 'Add appropriate y axis label here' },
+    yaxis: { title: 'Add appropriate x axis label here' }
 };
 
 Plotly.newPlot('chart_div', data, layout );
