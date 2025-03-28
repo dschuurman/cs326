@@ -12,7 +12,8 @@
  $user = "username";
  $pass = "password";
  $db = "database";
- $con = pg_connect("host=$host dbname=$db user=$user password=$pass")
+ $port = "12989";
+ $con = pg_connect("host=$host port=$port dbname=$db user=$user password=$pass")
 	 or die ("Could not connect to SQL server\n");
 ?>
 
