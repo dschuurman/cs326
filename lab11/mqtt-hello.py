@@ -14,7 +14,7 @@ TOPIC = 'cs326/jcalvin'
 
 # Callback when connecting to the MQTT broker
 def on_connect(client, userdata, flags, reason_code, properties):
-    if rc == 0:
+    if reason_code == 0:
         print(f'Connected to {BROKER}')
     else:
         print(f'Connection to {BROKER} failed. Return code={reason_code}')
