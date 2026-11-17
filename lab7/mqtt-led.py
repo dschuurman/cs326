@@ -36,7 +36,7 @@ def on_connect(client, userdata, flags, reason_code, properties):
 def on_message(client, data, msg):
     print(f'MQTT message received -> topic:{msg.topic}, message:{msg.payload}')
     if msg.topic == TOPIC:
-       if led.is_lit
+       if led.is_lit:
           led.off()
        else:
           led.on()
