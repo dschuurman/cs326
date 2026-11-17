@@ -24,7 +24,7 @@ PASSWORD = ''   # broker authentication password
 # define LED on BCM 16
 led = LED(16)
 
-def on_publish(client, userdata, mid):
+def on_publish(client, userdata, mid, reason_code, properties):
     ''' Callback when an MQTT message is published
     '''
     print("MQTT data published")
