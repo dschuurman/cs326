@@ -36,7 +36,7 @@ def on_connect(client, userdata, flags, reason_code, properties):
         print(f'Connected to {BROKER}')
     else:
         print(f'Connection to {BROKER} failed. Return code={reason_code}')
-        sys.exit(1)
+        os._exit(1)
 
 def on_message(client, data, msg):
     ''' Callback when client receives a subscribed message from the broker
