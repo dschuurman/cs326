@@ -21,7 +21,7 @@ PASSWORD = ''   # broker authentication password
 
 # Callback when a connection has been established with the MQTT broker
 def on_connect(client, userdata, flags, reason_code, properties):
-    if rc == 0:
+    if reason_code == 0:
         print(f'Connected to {BROKER}')
     else:
         print('Connection to {BROKER} failed. Return code={reason_code}')
