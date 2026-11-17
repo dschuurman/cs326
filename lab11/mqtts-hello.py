@@ -20,15 +20,15 @@ USERNAME = ''   # broker authentication username
 PASSWORD = ''   # broker authentication password
 
 # Callback when a connection has been established with the MQTT broker
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, reason_code, properties):
     if rc == 0:
         print(f'Connected to {BROKER}')
     else:
-        print('Connection to {BROKER} failed. Return code={rc}')
+        print('Connection to {BROKER} failed. Return code={reason_code}')
         os._exit(1)
    
 # Setup MQTT client and callbacks
-client = mqtt.Client()
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 client.on_connect = on_connect
 
 # Securely connect to MQTT broker
