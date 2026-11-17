@@ -29,7 +29,7 @@ def on_connect(client, userdata, flags, reason_code, properties):
     if reason_code == 0:
         print(f'Connected to {BROKER} successful.')
     else:
-        print(f'Connection to {BROKER} failed. Return code={rc}')
+        print(f'Connection to {BROKER} failed. Return code={reason_code}')
 
 # Callback when client receives a message from the broker
 # Use button message to turn LED on/off
