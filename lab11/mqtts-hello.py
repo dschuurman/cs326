@@ -24,7 +24,7 @@ def on_connect(client, userdata, flags, reason_code, properties):
     if reason_code == 0:
         print(f'Connected to {BROKER}')
     else:
-        print('Connection to {BROKER} failed. Return code={reason_code}')
+        print(f'Connection to {BROKER} failed. Return code={reason_code}')
         os._exit(1)
    
 # Setup MQTT client and callbacks
