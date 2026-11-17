@@ -29,13 +29,13 @@ def on_publish(client, userdata, mid):
     '''
     print("MQTT data published")
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, reason_code, properties):
     ''' Callback when connecting to the MQTT broker
     '''
-    if rc==0:
+    if reason_code==0:
         print(f'Connected to {BROKER}')
     else:
-        print(f'Connection to {BROKER} failed. Return code={rc}')
+        print(f'Connection to {BROKER} failed. Return code={reason_code}')
         sys.exit(1)
 
 def on_message(client, data, msg):
@@ -58,7 +58,7 @@ picam2.configure(config)
 picam2.start()
 
 # Setup MQTT client and callbacks
-client = mqtt.Client()
+client = mqtt.Client(CallbackAPIVersion.VERSION2)
 client.username_pw_set(USERNAME,password=PASSWORD) # remove for anonymous access
 client.tls_set(CERTS)
 client.on_connect = on_connect
@@ -102,7 +102,6 @@ try:
                 tags_state = tags
 
 except KeyboardInterrupt:
-    GPIO.cleanup()
     client.disconnect()
     picam2.stop()
     print('Done')
