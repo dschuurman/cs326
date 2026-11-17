@@ -13,15 +13,15 @@ DELAY = 5.0
 TOPIC = 'cs326/jcalvin'
 
 # Callback when connecting to the MQTT broker
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, reason_code, properties):
     if rc == 0:
         print(f'Connected to {BROKER}')
     else:
-        print(f'Connection to {BROKER} failed. Return code={rc}')
+        print(f'Connection to {BROKER} failed. Return code={reason_code}')
         os._exit(1)
 
 # Setup MQTT client and callbacks
-client = mqtt.Client()
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 client.on_connect = on_connect
 
 # Connect to MQTT broker
